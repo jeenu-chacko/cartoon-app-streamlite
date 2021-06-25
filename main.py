@@ -16,16 +16,17 @@ def get_image_download_link(img,filename,text):
     buffered = BytesIO()
     img.save(buffered, format="JPEG")
     img_str = base64.b64encode(buffered.getvalue()).decode()
-    href =  f'<a href="data:file/jpg;base64,{img_str}" download="{filename}">{text}</a>'
+    href =  f'<a href="data:file/txt;base64,{img_str}" download="{filename}">Download</a>'
     return href
 
 def main():
 	st.title('Cartoon app')
 	
 	image_file = st.file_uploader("Upload Image", type=["png","jpeg","jpg"])
-	if image_file is not None:
-		
+	if image_file is not None:	
 		img = load_image(image_file)
+		
+
 		st.image(img, caption='Original Image',use_column_width=True,width=250)
 
 		new_img = np.array(img.convert('RGB'))
@@ -39,8 +40,7 @@ def main():
 		st.image(cartoon, caption='Catoonised Image',use_column_width=True,width=250)
 
 		result = Image.fromarray(cartoon)		
-		st.write(dir(result))
-		st.markdown(get_image_download_link(result,"hai",'Download '+"jpg"), unsafe_allow_html=True)
+		st.markdown(get_image_download_link(result,image_file.name,'Download '+image_file.name), unsafe_allow_html=True)
 	else:
 		st.write("Make sure you image is in JPEG/JPG/PNG Format.")
 	
